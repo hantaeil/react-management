@@ -20,7 +20,7 @@ const styles = theme => ({
     }
 })
 
-const customers = [
+const customers2 = [
 	{
 		id : 1
       , name : `Han Tae-il`
@@ -40,6 +40,19 @@ const customers = [
 ]
 
 class App extends Component {
+    state = {
+        customers: ""
+    }
+    componentDidMount() {
+        this.callApi()
+            .then(res => this.setState({customers: res}))
+            .catch(err => console.error(err))
+    }
+    callApi = async() => {
+        const response = await fetch(`/api/customers`)
+        const body = await response.json()
+        return body 
+    }
 	render() {
         const { classes } = this.props;
 		return (
@@ -56,7 +69,7 @@ class App extends Component {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {customers.map(customer => <Customer key={customer.id} id={customer.id} name={customer.name} image={customer.image} gender={customer.gender} bday={customer.bday} job={customer.job}/>)}
+                        {this.state.customers ? this.state.customers.map(customer => <Customer key={customer.id} id={customer.id} name={customer.name} image={customer.image} gender={customer.gender} bday={customer.bday} job={customer.job}/>) : ""}
                     </TableBody>
                 </Table>
             </Paper>
